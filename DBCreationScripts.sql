@@ -59,5 +59,38 @@ Bytes int,
 UnitPrie int
 )
 
+CREATE TABLE Invoice(
+Id int PRIMARY KEY,
+CustomerId int,
+InvoiceDate date,
+PostalCode int REFERENCES Adress(PostalCode),
+Total int
+)
+
+CREATE TABLE InvoiceLine(
+Id int PRIMARY KEY,
+InvoiceId int REFERENCES Invoice(Id),
+TrackId int REFERENCES Track(Id),
+UnitPrice int,
+Quantity int
+)
+
+CREATE TABLE Tickets(
+Id int PRIMARY KEY,
+ConcertId int REFERENCES Concert(Id),
+Price int,
+InvoiceId int REFERENCES Invoice(Id)
+)
+
+CREATE TABLE Customer(
+Id int PRIMARY KEY,
+FirstName varchar(50),
+LastName varchar(50),
+Phone varchar(25),
+Fax varchar(25),
+Email varchar(40)
+)
+
+
 
 
