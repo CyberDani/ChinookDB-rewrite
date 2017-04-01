@@ -3,28 +3,28 @@
 CREATE DATABASE BI_source
 use BI_source
 
--- Feltoltes adatokkal
+-- Tablak letrehozasa
 
 CREATE TABLE Artist
 (
-Id int PRIMARY KEY,
+Id int PRIMARY KEY IDENTITY(1,1),
 AName varchar(200),
 ); 
 
 CREATE TABLE Country
 (
-Id int PRIMARY KEY,
+Id int PRIMARY KEY IDENTITY(1,1),
 CName varchar(200)
 );
 
 CREATE TABLE City
 (
-Id int PRIMARY KEY,
+Id int PRIMARY KEY IDENTITY(1,1),
 CiName varchar(200)
 );
 
 CREATE TABLE Album(
-Id int PRIMARY KEY,
+Id int PRIMARY KEY IDENTITY(1,1),
 Title varchar(200),
 ArtistId int REFERENCES Artist(Id),
 ReleaseDate date
@@ -38,24 +38,24 @@ CountryId int REFERENCES Country(Id)
 )
 
 CREATE TABLE Concert(
-Id int PRIMARY KEY,
+Id int PRIMARY KEY IDENTITY(1,1),
 PostalCode int REFERENCES Adress(PostalCode),
 CDate date,
 ArtistId int REFERENCES Artist(Id)
 )
 
 CREATE TABLE MediaType(
-Id int PRIMARY KEY,
+Id int PRIMARY KEY IDENTITY(1,1),
 MName varchar(200),
 )
 
 CREATE TABLE Genre(
-Id int PRIMARY KEY,
+Id int PRIMARY KEY IDENTITY(1,1),
 GName varchar(200)
 )
 
 CREATE TABLE Track(
-Id int PRIMARY KEY,
+Id int PRIMARY KEY IDENTITY(1,1),
 TName varchar(200),
 AlbumId int REFERENCES Album(Id),
 MediaTypeId int REFERENCES MediaType(Id),
@@ -67,7 +67,7 @@ UnitPrie int
 )
 
 CREATE TABLE Invoice(
-Id int PRIMARY KEY,
+Id int PRIMARY KEY IDENTITY(1,1),
 CustomerId int,
 InvoiceDate date,
 PostalCode int REFERENCES Adress(PostalCode),
@@ -75,7 +75,7 @@ Total int
 )
 
 CREATE TABLE InvoiceLine(
-Id int PRIMARY KEY,
+Id int PRIMARY KEY IDENTITY(1,1),
 InvoiceId int REFERENCES Invoice(Id),
 TrackId int REFERENCES Track(Id),
 UnitPrice int,
@@ -83,14 +83,14 @@ Quantity int
 )
 
 CREATE TABLE Tickets(
-Id int PRIMARY KEY,
+Id int PRIMARY KEY IDENTITY(1,1),
 ConcertId int REFERENCES Concert(Id),
 Price int,
 InvoiceId int REFERENCES Invoice(Id)
 )
 
 CREATE TABLE Customer(
-Id int PRIMARY KEY,
+Id int PRIMARY KEY IDENTITY(1,1),
 FirstName varchar(50),
 LastName varchar(50),
 Phone varchar(25),
