@@ -66,9 +66,18 @@ Bytes int,
 UnitPrie int
 )
 
+CREATE TABLE Customer(
+Id int PRIMARY KEY IDENTITY(1,1),
+FirstName varchar(50),
+LastName varchar(50),
+Phone varchar(25),
+Fax varchar(25),
+Email varchar(40)
+)
+
 CREATE TABLE Invoice(
 Id int PRIMARY KEY IDENTITY(1,1),
-CustomerId int,
+CustomerId int REFERENCES Customer(Id),
 InvoiceDate date,
 PostalCode int REFERENCES Adress(PostalCode),
 Total int
@@ -88,16 +97,3 @@ ConcertId int REFERENCES Concert(Id),
 Price int,
 InvoiceId int REFERENCES Invoice(Id)
 )
-
-CREATE TABLE Customer(
-Id int PRIMARY KEY IDENTITY(1,1),
-FirstName varchar(50),
-LastName varchar(50),
-Phone varchar(25),
-Fax varchar(25),
-Email varchar(40)
-)
-
-
-
-
