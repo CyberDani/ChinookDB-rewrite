@@ -15,3 +15,18 @@ SELECT DISTINCT Name AS MName FROM Chinook.dbo.MediaType
 INSERT INTO Genre(GName)
 SELECT DISTINCT Name AS GName FROM Chinook.dbo.Genre
 
+CREATE PROCEDURE TransferAlbum
+AS
+BEGIN
+SELECT cart.ArtistId,biart.Id
+INTO #ArtistData 
+FROM Chinook.dbo.Artist cart, BI_source.dbo.Artist biart
+WHERE AName= cart.Name
+
+INSERT INTO BI_source.dbo.Album(Title,ArtistId,ReleaseDate)
+SELECT Title,ad.Id,DATEADD(DAY, ABS(CHECKSUM(NEWID()) % 3650), '2000-01-01') FROM Chinook.dbo.Album calb, #ArtistData ad WHERE calb.ArtistId=ad.ArtistId
+END
+
+DROP PROCEDURE TransferAlbum 
+EXECUTE TransferAlbum
+
