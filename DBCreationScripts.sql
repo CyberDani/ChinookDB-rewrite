@@ -1,3 +1,10 @@
+-- Uj adatbazis letrehozasa
+
+CREATE DATABASE BI_source
+use BI_source
+
+-- Feltoltes adatokkal
+
 CREATE TABLE Artist
 (
 Id int PRIMARY KEY,
