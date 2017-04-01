@@ -1,9 +1,27 @@
--- Uj adatbazis letrehozasa
+/*******************************************************************************
+   Drop database if it exists
+********************************************************************************/
+IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'BI_source')
+BEGIN
+	ALTER DATABASE BI_source SET OFFLINE WITH ROLLBACK IMMEDIATE;
+	ALTER DATABASE BI_source SET ONLINE;
+	DROP DATABASE BI_source;
+END
 
-CREATE DATABASE BI_source
-use BI_source
+GO
 
--- Tablak letrehozasa
+/*******************************************************************************
+   Create database
+********************************************************************************/
+CREATE DATABASE BI_source;
+GO
+
+USE BI_source;
+GO
+
+/*******************************************************************************
+   Tablak letrehozasa
+********************************************************************************/
 
 CREATE TABLE Artist
 (
