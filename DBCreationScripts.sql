@@ -20,7 +20,8 @@ CName varchar(200)
 CREATE TABLE City
 (
 Id int PRIMARY KEY IDENTITY(1,1),
-CiName varchar(200)
+CiName varchar(200),
+CountryId int REFERENCES Country(Id),
 );
 
 CREATE TABLE Album(
@@ -34,7 +35,6 @@ CREATE TABLE Adress(
 PostalCode int PRIMARY KEY,
 Addr varchar(200),
 CityId int REFERENCES City(Id),
-CountryId int REFERENCES Country(Id)
 )
 
 CREATE TABLE Concert(
