@@ -50,14 +50,14 @@ ReleaseDate date
 )
 
 CREATE TABLE Adress(
-PostalCode int PRIMARY KEY,
+PostalCode nvarchar(20) PRIMARY KEY,
 Addr varchar(200),
 CityId int REFERENCES City(Id),
 )
 
 CREATE TABLE Concert(
 Id int PRIMARY KEY IDENTITY(1,1),
-PostalCode int REFERENCES Adress(PostalCode),
+PostalCode nvarchar(20) REFERENCES Adress(PostalCode),
 CDate date,
 ArtistId int REFERENCES Artist(Id)
 )
@@ -97,7 +97,7 @@ CREATE TABLE Invoice(
 Id int PRIMARY KEY IDENTITY(1,1),
 CustomerId int REFERENCES Customer(Id),
 InvoiceDate date,
-PostalCode int REFERENCES Adress(PostalCode),
+PostalCode nvarchar(20) REFERENCES Adress(PostalCode),
 Total int
 )
 
