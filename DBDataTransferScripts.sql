@@ -80,3 +80,4 @@ SELECT coll.PostalCode, coll.Addr, c.Id AS CityId FROM
 	SELECT DISTINCT BillingCity AS CiName, BillingAddress AS Addr, BillingPostalCode AS PostalCode FROM Chinook.dbo.Invoice) AS coll
 	JOIN City AS c ON
 	coll.CiName = c.CiName
+
