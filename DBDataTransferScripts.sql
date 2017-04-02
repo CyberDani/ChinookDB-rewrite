@@ -81,3 +81,58 @@ SELECT coll.PostalCode, coll.Addr, c.Id AS CityId FROM
 	JOIN City AS c ON
 	coll.CiName = c.CiName
 
+INSERT INTO BI_source.dbo.Customer(FirstName,LastName,Phone,Fax,Email)
+SELECT FirstName,LastName,Phone,Fax,Email FROM Chinook.dbo.Customer
+
+CREATE PROCEDURE CreateConcert
+AS 
+BEGIN 
+declare @maxArtistId int;
+declare @concertDB int;
+declare @artistId int;
+declare @postalCode varchar(200);
+declare @addressNumber int;
+declare @rowNum int;
+declare @date date;
+set @concertDB=0;
+
+SELECT @addressNumber=COUNT(*) FROM Adress
+SELECT @maxArtistId=Max(Id) FROM Artist
+WHILE @concertDB<400
+BEGIN
+SELECT @rowNum=rand() * @addressNumber+ 1;
+SELECT @postalCode=PostalCode FROM (
+      SELECT ROW_NUMBER() OVER (ORDER BY Addr ASC) AS RowNumber,
+      *
+      FROM Adress
+ ) AS code
+WHERE RowNumber = @rowNum;
+
+SELECT @artistId=rand() * @maxArtistId + 1;
+SELECT @date= DATEADD(DAY, ABS(CHECKSUM(NEWID()) % 3650), '2000-01-01')
+
+INSERT INTO Concert(PostalCode,CDate,ArtistId)
+SELECT @postalCode,@date,@artistId
+ 
+ SET @concertDB=@concertDB+1;
+
+END
+
+END
+
+EXECUTE CreateConcert 
+--DROP PROCEDURE CreateConcert
+
+--Row number random to be done 
+
+INSERT INTO Track(TName,AlbumId,MediaTypeId,GenreId,Composer,Miliseconds,Bytes,UnitPrie)
+SELECT coll.Name AS TName, alb.Id AS AlbumId, mt.Id AS MediaTypeId, ge.Id AS GenreId, coll.Composer, coll.Milliseconds,
+	coll.Bytes, coll.UnitPrice FROM(
+	SELECT orig.Name, a.Title AS album, m.Name AS mediaType, g.Name AS Genre,orig.Composer, 
+			orig.Bytes, orig.Milliseconds ,orig.UnitPrice FROM Chinook.dbo.Track AS orig
+	JOIN Chinook.dbo.Album a ON a.AlbumId = orig.AlbumId
+	JOIN Chinook.dbo.MediaType m ON m.MediaTypeId = orig.MediaTypeId
+	JOIN Chinook.dbo.Genre g ON g.GenreId = orig.GenreId) AS coll
+JOIN Album alb ON alb.Title = coll.album
+JOIN MediaType mt ON mt.MName = coll.mediaType
+JOIN Genre ge ON ge.GName = coll.Genre
