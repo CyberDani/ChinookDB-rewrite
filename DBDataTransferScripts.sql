@@ -42,3 +42,8 @@ SELECT DISTINCT Country AS CName FROM Chinook.dbo.Customer
 SELECT DISTINCT Country AS CName FROM Chinook.dbo.Employee
 	UNION
 SELECT DISTINCT BillingCountry AS CName FROM Chinook.dbo.Invoice
+
+INSERT INTO BI_source.dbo.Customer(FirstName,LastName,Phone,Fax,Email)
+SELECT FirstName,LastName,Phone,Fax,Email FROM Chinook.dbo.Customer
+
+
