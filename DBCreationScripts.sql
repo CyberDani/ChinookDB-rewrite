@@ -81,7 +81,7 @@ GenreId int REFERENCES Genre(Id),
 Composer varchar(200),
 Miliseconds int,
 Bytes int,
-UnitPrie int
+UnitPrice numeric(10,2)
 )
 
 CREATE TABLE Customer(
@@ -96,16 +96,16 @@ Email varchar(40)
 CREATE TABLE Invoice(
 Id int PRIMARY KEY IDENTITY(1,1),
 CustomerId int REFERENCES Customer(Id),
-InvoiceDate date,
+InvoiceDate datetime,
 PostalCode nvarchar(20) REFERENCES Adress(PostalCode),
-Total int
+Total numeric(10,2)
 )
 
 CREATE TABLE InvoiceLine(
 Id int PRIMARY KEY IDENTITY(1,1),
 InvoiceId int REFERENCES Invoice(Id),
 TrackId int REFERENCES Track(Id),
-UnitPrice int,
+UnitPrice numeric(10,2),
 Quantity int
 )
 
