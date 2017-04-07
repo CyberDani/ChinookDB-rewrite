@@ -20,6 +20,7 @@ CREATE TABLE Adress(
 ID int PRIMARY KEY IDENTITY(1,1),
 addr nvarchar(512),
 cityId nvarchar(512),
+postalCode nvarchar(512),
 EXECUTION_INSTANCE_GUID nvarchar(38) not null,
 LOAD_DATE datetime not null
 )

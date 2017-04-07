@@ -50,10 +50,14 @@ ReleaseDate date
 )
 
 CREATE TABLE Adress(
-PostalCode nvarchar(20) PRIMARY KEY,
+Id int PRIMARY KEY IDENTITY(1,1),
+PostalCode nvarchar(20),
 Addr varchar(200),
 CityId int REFERENCES City(Id),
 )
+
+CREATE UNIQUE INDEX PostalCode   
+   ON Adress (PostalCode);  
 
 CREATE TABLE Concert(
 Id int PRIMARY KEY IDENTITY(1,1),
