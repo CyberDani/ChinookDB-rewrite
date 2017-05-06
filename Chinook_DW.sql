@@ -26,7 +26,7 @@ GO
 --  Address
 --~=============/
 CREATE TABLE HubAdress(
-H_Adr_SQN INT PRIMARY KEY,
+H_Adr_SQN INT PRIMARY KEY IDENTITY(1,1) ,
 H_Adr_BK VARCHAR(10),
 H_Adr_LDTS DATETIME,
 H_Adr_RSRC VARCHAR(30)
@@ -43,7 +43,7 @@ postalCode VARCHAR(200)
 --  City
 --~=============/
 CREATE TABLE HubCity(
-H_City_SQN INT PRIMARY KEY,
+H_City_SQN INT PRIMARY KEY IDENTITY(1,1),
 H_City_BK VARCHAR(10),
 H_City_LDTS DATETIME,
 H_City_RSRC VARCHAR(30)
@@ -59,7 +59,7 @@ ciName VARCHAR(200)
 --  Country
 --~=============/
 CREATE TABLE HubCountry(
-H_Country_SQN INT PRIMARY KEY,
+H_Country_SQN INT PRIMARY KEY IDENTITY(1,1),
 H_Country_BK VARCHAR(10),
 H_Country_LDTS DATETIME,
 H_Country_RSRC VARCHAR(30)
@@ -74,7 +74,7 @@ CName VARCHAR(200)
 
 -- Link ==> Adress + City + Country
 CREATE TABLE LinkAdrCityCountry(
-L_AdrCity_SQN INT PRIMARY KEY,
+L_AdrCity_SQN INT PRIMARY KEY IDENTITY(1,1),
 L_AdrCity_LDTS DATETIME,
 L_AdrCity_RSRC VARCHAR(30),
 H_Adr_SQN INT REFERENCES HubAdress(H_Adr_SQN),
@@ -85,7 +85,7 @@ H_Country_SQN INT REFERENCES HubCountry(H_Country_SQN)
 --  Artist
 --~=============/
 CREATE TABLE HubArtist(
-H_Artist_SQN INT PRIMARY KEY,
+H_Artist_SQN INT PRIMARY KEY IDENTITY(1,1), 
 H_Artist_BK VARCHAR(10),
 H_Artist_LDTS DATETIME,
 H_Artist_RSRC VARCHAR(30)
@@ -101,7 +101,7 @@ AName VARCHAR(200)
 --  Concert
 --~=============/
 CREATE TABLE HubConcert(
-H_Concert_SQN INT PRIMARY KEY,
+H_Concert_SQN INT PRIMARY KEY IDENTITY(1,1),
 H_Concert_BK VARCHAR(10),
 H_Concert_LDTS DATETIME,
 H_Concert_RSRC VARCHAR(30)
@@ -117,7 +117,7 @@ postalCode varchar(20)
 
 -- Link ==> Artist + Concert
 CREATE TABLE ConcertArtLink(
-L_ConcertArt_SQN INT PRIMARY KEY,
+L_ConcertArt_SQN INT PRIMARY KEY IDENTITY(1,1),
 L_ConcertArt_LDTS DATETIME,
 L_ConcertArt_RSRC VARCHAR(30),
 H_Artist_SQN INT REFERENCES HubArtist(H_Artist_SQN),
@@ -127,7 +127,7 @@ H_Concert_SQN INT REFERENCES HubConcert(H_Concert_SQN)
 --  Invoice
 --~=============/
 CREATE TABLE HubInvoice(
-H_Invoice_SQN INT PRIMARY KEY,
+H_Invoice_SQN INT PRIMARY KEY IDENTITY(1,1),
 H_Invoice_BK VARCHAR(10),
 H_Invoice_LDTS DATETIME,
 H_Invoice_RSRC VARCHAR(30)
@@ -145,7 +145,7 @@ total integer
 --  Customer
 --~=============/
 CREATE TABLE HubCustomer(
-	H_Customer_SQN INT PRIMARY KEY,
+	H_Customer_SQN INT PRIMARY KEY IDENTITY(1,1),
 	H_Customer_BK VARCHAR(10),
 	H_Customer_LDTS DATETIME,
 	H_Customer_RSRC VARCHAR(30)
@@ -164,7 +164,7 @@ CREATE TABLE SatCustomer(
 
 -- Link ==> Invoice + Customer
 CREATE TABLE LinkInvoiceCust(
-	L_InvoiceCust_SQN INT PRIMARY KEY,
+	L_InvoiceCust_SQN INT PRIMARY KEY IDENTITY(1,1),
 	L_InvoiceCust_LDTS DATETIME,
 	L_InvoiceCust_RSRC VARCHAR(30),
 	H_Invoice_SQN INT REFERENCES HubInvoice(H_Invoice_SQN),
@@ -174,7 +174,7 @@ CREATE TABLE LinkInvoiceCust(
 --  MediaType
 --~=============/
 CREATE TABLE HubMediaType(
-	H_MedType_SQN INT PRIMARY KEY,
+	H_MedType_SQN INT PRIMARY KEY IDENTITY(1,1),
 	H_MedType_BK VARCHAR(10),
 	H_MedType_LDTS DATETIME,
 	H_MedType_RSRC VARCHAR(30)
@@ -190,7 +190,7 @@ CREATE TABLE SatMediaType(
 --  Genre
 --~=============/
 CREATE TABLE HubGenre(
-	H_Genre_SQN INT PRIMARY KEY,
+	H_Genre_SQN INT PRIMARY KEY IDENTITY(1,1),
 	H_Genre_BK VARCHAR(10),
 	H_Genre_LDTS DATETIME,
 	H_Genre_RSRC VARCHAR(30)
@@ -206,7 +206,7 @@ CREATE TABLE SatGenre(
 --  InvoiceLine
 --~=============/
 CREATE TABLE HubInvoiceLn(
-	H_InvoiceLn_SQN INT PRIMARY KEY,
+	H_InvoiceLn_SQN INT PRIMARY KEY IDENTITY(1,1),
 	H_InvoiceLn_BK VARCHAR(10),
 	H_InvoiceLn_LDTS DATETIME,
 	H_InvoiceLn_RSRC VARCHAR(30)
@@ -223,7 +223,7 @@ CREATE TABLE SatInvoiceLn(
 --  Track
 --~=============/
 CREATE TABLE HubTrack(
-	H_Track_SQN INT PRIMARY KEY,
+	H_Track_SQN INT PRIMARY KEY IDENTITY(1,1),
 	H_Track_BK VARCHAR(10),
 	H_Track_LDTS DATETIME,
 	H_Track_RSRC VARCHAR(30)
@@ -242,7 +242,7 @@ CREATE TABLE SatTrack(
 
 -- Link ==> InvoiceLine + Track + Invoice
 CREATE TABLE LinkInvoiceLn(
-	L_InvoiceLn_SQN INT PRIMARY KEY,
+	L_InvoiceLn_SQN INT PRIMARY KEY IDENTITY(1,1),
 	L_InvoiceLn_LDTS DATETIME,
 	L_InvoiceLn_RSRC VARCHAR(30),
 	H_InvoiceLn_SQN int REFERENCES HubInvoiceLn(H_InvoiceLn_SQN),
@@ -253,7 +253,7 @@ CREATE TABLE LinkInvoiceLn(
 --  Album
 --~=============/
 CREATE TABLE HubAlbum(
-	H_Album_SQN INT PRIMARY KEY,
+	H_Album_SQN INT PRIMARY KEY IDENTITY(1,1),
 	H_Album_BK VARCHAR(10),
 	H_Album_LDTS DATETIME,
 	H_Album_RSRC VARCHAR(30)
@@ -269,7 +269,7 @@ CREATE TABLE SatAlbum(
 
 -- Link ==> Track + MediaType + Genre + Album
 CREATE TABLE LinkTrack(
-	L_Track_SQN INT PRIMARY KEY,
+	L_Track_SQN INT PRIMARY KEY IDENTITY(1,1),
 	L_Track_LDTS DATETIME,
 	L_Track_RSRC VARCHAR(30),
 	H_Track_SQN int REFERENCES HubTrack(H_Track_SQN),
@@ -280,7 +280,7 @@ CREATE TABLE LinkTrack(
 
 -- Link ==> Album + Artist
 CREATE TABLE LinkAlbum(
-	L_Album_SQN INT PRIMARY KEY,
+	L_Album_SQN INT PRIMARY KEY IDENTITY(1,1),
 	L_Album_LDTS DATETIME,
 	L_Album_RSRC VARCHAR(30),
 	H_Album_SQN int REFERENCES HubAlbum(H_Album_SQN),
@@ -290,7 +290,7 @@ CREATE TABLE LinkAlbum(
 --  Tickets
 --~=============/
 CREATE TABLE HubTickets(
-	H_Tickets_SQN INT PRIMARY KEY,
+	H_Tickets_SQN INT PRIMARY KEY IDENTITY(1,1),
 	H_Tickets_BK VARCHAR(10),
 	H_Tickets_LDTS DATETIME,
 	H_Tickets_RSRC VARCHAR(30)
@@ -305,7 +305,7 @@ CREATE TABLE SatTickets(
 
 -- Link ==> Tickets + Invoice
 CREATE TABLE LinkTickets(
-	L_Tickets_SQN INT PRIMARY KEY,
+	L_Tickets_SQN INT PRIMARY KEY IDENTITY(1,1),
 	L_Tickets_LDTS DATETIME,
 	L_Tickets_RSRC VARCHAR(30),
 	H_Tickets_SQN int REFERENCES HubTickets(H_Tickets_SQN),
