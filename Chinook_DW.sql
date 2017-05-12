@@ -124,7 +124,7 @@ postalCode varchar(20)
 )
 
 -- Link ==> Artist + Concert
-CREATE TABLE ConcertArtLink(
+CREATE TABLE LinkConcertArt(
 L_ConcertArt_SQN INT PRIMARY KEY IDENTITY(1,1),
 L_ConcertArt_LDTS DATETIME,
 L_ConcertArt_RSRC VARCHAR(30),
