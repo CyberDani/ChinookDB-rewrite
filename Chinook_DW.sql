@@ -72,14 +72,22 @@ S_Adr_RSRC VARCHAR(30),
 CName VARCHAR(200)
 )
 
--- Link ==> Adress + City + Country
-CREATE TABLE LinkAdrCityCountry(
-L_AdrCity_SQN INT PRIMARY KEY IDENTITY(1,1),
-L_AdrCity_LDTS DATETIME,
-L_AdrCity_RSRC VARCHAR(30),
-H_Adr_SQN INT ,
+-- Link ==>  Country + City 
+CREATE TABLE LinkCountryCity(
+L_CountryCity_SQN INT PRIMARY KEY IDENTITY(1,1),
+L_L_CountryCity_SQN_LDTS DATETIME,
+L_L_CountryCity_SQN_RSRC VARCHAR(30),
 H_City_SQN INT ,
 H_Country_SQN INT 
+)
+
+-- Link ==>  City + Address
+CREATE TABLE LinkCityAddress(
+L_CityAddress_SQN INT PRIMARY KEY IDENTITY(1,1),
+L_L_CityAddress_SQN_LDTS DATETIME,
+L_L_CityAddress_SQN_RSRC VARCHAR(30),
+H_City_SQN INT ,
+H_Address_SQN INT 
 )
 
 --  Artist
