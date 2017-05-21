@@ -61,7 +61,7 @@ CREATE UNIQUE INDEX PostalCode
 
 CREATE TABLE Concert(
 Id int PRIMARY KEY IDENTITY(1,1),
-PostalCode nvarchar(20) REFERENCES Adress(PostalCode),
+AddressID int REFERENCES Adress(Id),
 CDate date,
 ArtistId int REFERENCES Artist(Id)
 )
@@ -101,7 +101,7 @@ CREATE TABLE Invoice(
 Id int PRIMARY KEY IDENTITY(1,1),
 CustomerId int REFERENCES Customer(Id),
 InvoiceDate datetime,
-PostalCode nvarchar(20) REFERENCES Adress(PostalCode),
+AddressID int REFERENCES Adress(Id),
 Total numeric(10,2)
 )
 

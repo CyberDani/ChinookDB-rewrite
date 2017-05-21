@@ -1,10 +1,53 @@
 /*******************************************************************************
-  Feltoltes adatokkal
-  -------------------
-  Ures adatbazisra alkalmazd, mert maskepp meg fogja duplazni az adatokat!
+  Upload from Chinook to BI_source
+  --------------------------------
+  /> Before uplading, romoves all records from BI_source
+  /> Before uplading, romoves all procedures from BI_source 
+  /> AUTO_INCREMENT counters reset to 0
 ********************************************************************************/
 
 use BI_source
+GO
+
+DELETE FROM Tickets
+DBCC CHECKIDENT ('BI_source.dbo.Tickets',RESEED, 0)
+GO
+DELETE FROM InvoiceLine
+DBCC CHECKIDENT ('BI_source.dbo.InvoiceLine',RESEED, 0)
+GO
+DELETE FROM Invoice
+DBCC CHECKIDENT ('BI_source.dbo.Invoice',RESEED, 0)
+GO
+DELETE FROM Customer
+DBCC CHECKIDENT ('BI_source.dbo.Customer',RESEED, 0)
+GO
+DELETE FROM Track
+DBCC CHECKIDENT ('BI_source.dbo.Track',RESEED, 0)
+GO
+DELETE FROM Genre
+DBCC CHECKIDENT ('BI_source.dbo.Genre',RESEED, 0)
+GO
+DELETE FROM MediaType
+DBCC CHECKIDENT ('BI_source.dbo.MediaType',RESEED, 0)
+GO
+DELETE FROM Concert
+DBCC CHECKIDENT ('BI_source.dbo.Concert',RESEED, 0)
+GO
+DELETE FROM Adress
+DBCC CHECKIDENT ('BI_source.dbo.Adress',RESEED, 0)
+GO
+DELETE FROM Album
+DBCC CHECKIDENT ('BI_source.dbo.Album',RESEED, 0)
+GO
+DELETE FROM City
+DBCC CHECKIDENT ('BI_source.dbo.City',RESEED, 0)
+GO
+DELETE FROM Country
+DBCC CHECKIDENT ('BI_source.dbo.Country',RESEED, 0)
+GO
+DELETE FROM Artist
+DBCC CHECKIDENT ('BI_source.dbo.Artist',RESEED, 0)
+GO
 
 INSERT INTO Artist(AName)
 SELECT DISTINCT Name AS AName FROM Chinook.dbo.Artist
@@ -97,53 +140,48 @@ GO
 CREATE PROCEDURE CreateConcert
 AS 
 BEGIN 
-declare @maxArtistId int;
-declare @concertDB int;
-declare @artistId int;
-declare @postalCode varchar(200);
-declare @addressNumber int;
-declare @rowNum int;
-declare @date date;
-set @concertDB=0;
+	declare @maxArtistId int;
+	declare @concertDB int;
+	declare @artistId int;
+	declare @AdressID int;
+	declare @addressNumber int;
+	declare @rowNum int;
+	declare @date date;
+	set @concertDB=0;
 
-SELECT @addressNumber=COUNT(*) FROM Adress
-SELECT @maxArtistId=Max(Id) FROM Artist
-WHILE @concertDB<400
-BEGIN
-SELECT @rowNum=rand() * @addressNumber+ 1;
-SELECT @postalCode=PostalCode FROM (
-      SELECT ROW_NUMBER() OVER (ORDER BY Addr ASC) AS RowNumber,
-      *
-      FROM Adress
- ) AS code
-WHERE RowNumber = @rowNum;
+	SELECT @addressNumber=COUNT(*) FROM Adress
+	SELECT @maxArtistId=Max(Id) FROM Artist
+	WHILE @concertDB<400
+	BEGIN
+		SELECT @rowNum=rand() * @addressNumber+ 1;
+		SELECT @AdressID=Id FROM (
+			  SELECT ROW_NUMBER() OVER (ORDER BY Addr ASC) AS RowNumber,
+			  *
+			  FROM Adress
+		 ) AS code
+		WHERE RowNumber = @rowNum;
 
-SELECT @artistId=rand() * @maxArtistId + 1;
-SELECT @date= DATEADD(DAY, ABS(CHECKSUM(NEWID()) % 3650), '2000-01-01')
+		SELECT @artistId=rand() * @maxArtistId + 1;
+		SELECT @date= DATEADD(DAY, ABS(CHECKSUM(NEWID()) % 3650), '2000-01-01')
 
-INSERT INTO Concert(PostalCode,CDate,ArtistId)
-SELECT @postalCode,@date,@artistId
+		INSERT INTO Concert(AddressID,CDate,ArtistId)
+		SELECT @AdressID,@date,@artistId
  
- SET @concertDB=@concertDB+1;
+		SET @concertDB=@concertDB+1;
 
-END
-
+	END
 END
 GO
 
 EXECUTE CreateConcert 
---DROP PROCEDURE CreateConcert
 GO
 
-
 -- Put some Random value when Composer is NULL
-
 UPDATE Chinook.dbo.Track
 SET Composer = N'Gyozike'
 WHERE Composer IS NULL
 
 --Row number random to be done 
-
 INSERT INTO Track(TName,AlbumId,MediaTypeId,GenreId,Composer,Miliseconds,Bytes,UnitPrice)
 SELECT coll.Name AS TName, alb.Id AS AlbumId, mt.Id AS MediaTypeId, ge.Id AS GenreId, coll.Composer, coll.Milliseconds,
 	coll.Bytes, coll.UnitPrice FROM(
@@ -157,12 +195,13 @@ JOIN MediaType mt ON mt.MName = coll.mediaType
 JOIN Genre ge ON ge.GName = coll.Genre
 
 
-INSERT INTO Invoice(CustomerId,InvoiceDate, PostalCode, Total)
-SELECT cust.Id AS CustomerId, coll.InvoiceDate, coll.PostalCode, coll.Total FROM 
-	(SELECT c.FirstName, c.LastName, c.Email, orig.InvoiceDate, orig.BillingPostalCode AS PostalCode, orig.Total
+INSERT INTO Invoice(CustomerId,InvoiceDate, AddressID, Total)
+SELECT cust.Id AS CustomerId, coll.InvoiceDate, adr.Id AS AddressID, coll.Total FROM 
+	(SELECT c.FirstName, c.LastName, c.Email, orig.InvoiceDate, orig.BillingAddress AS Adress, orig.Total
 	FROM Chinook.dbo.Invoice AS orig
 	JOIN Chinook.dbo.Customer c ON c.CustomerId = orig.CustomerId) AS coll
 JOIN Customer cust ON cust.FirstName = coll.FirstName AND cust.LastName = coll.LastName AND cust.Email = coll.Email
+JOIN Adress adr ON adr.Addr = coll.Adress
 
 
 INSERT INTO InvoiceLine(InvoiceId, TrackId, UnitPrice, Quantity)
@@ -178,7 +217,8 @@ SELECT inv.Id AS InvoiceId, letsee.TrackId, letsee.UnitPrice, letsee.Quantity FR
 							AND tr.Miliseconds = coll.Milliseconds AND tr.UnitPrice = coll.trackUnitPrice) AS almost
 	JOIN Chinook.dbo.Customer c ON c.CustomerId = almost.CustomerId) AS letsee
 JOIN Customer cust ON cust.FirstName = letsee.FirstName AND cust.LastName = letsee.LastName AND cust.Email = letsee.Email
-JOIN Invoice inv ON inv.PostalCode = letsee.BillingPostalCode AND inv.CustomerId = cust.Id AND inv.InvoiceDate = letsee.InvoiceDate
+JOIN Adress adr ON adr.PostalCode = letsee.BillingPostalCode
+JOIN Invoice inv ON inv.AddressID = adr.Id AND inv.CustomerId = cust.Id AND inv.InvoiceDate = letsee.InvoiceDate
 
 
 IF (OBJECT_ID('GenerateTicket', 'P') IS NOT NULL) 
@@ -189,7 +229,7 @@ CREATE PROCEDURE GenerateTicket
 AS 
 BEGIN 
 	declare @date date;
-	declare @postalCode nvarchar(20);
+	declare @AddressID int;
 
 	declare @nrOfConcert int;
 	declare @nrOfCustomer int;
@@ -235,14 +275,14 @@ BEGIN
 							  FROM Customer) AS foo
 						  WHERE rownumber = @row_Customer);
 
-		SET @postalCode = (SELECT PostalCode FROM
-							(SELECT PostalCode, ROW_NUMBER() OVER (ORDER BY PostalCode ASC) AS rownumber
+		SET @AddressID = (SELECT Id FROM
+							(SELECT Id, ROW_NUMBER() OVER (ORDER BY PostalCode ASC) AS rownumber
 							  FROM Adress) AS foo
 						  WHERE rownumber = @row_Address);
 
 
-		INSERT INTO Invoice(CustomerId, InvoiceDate, PostalCode, Total)
-		VALUES (@customerID, @date, @postalCode, @price)
+		INSERT INTO Invoice(CustomerId, InvoiceDate, AddressID, Total)
+		VALUES (@customerID, @date, @AddressID, @price)
  
 		SET @invoiceID = (SELECT TOP 1 Id FROM Invoice ORDER BY Id DESC);
 

@@ -119,17 +119,21 @@ CREATE TABLE SatConcert(
 H_Concert_SQN INT NOT NULL,
 S_Concert_LDTS DATETIME,
 S_Concert_RSRC VARCHAR(30),
-CDate date,
-postalCode varchar(20)
+CDate date
 )
 
 -- Link ==> Artist + Concert
+<<<<<<< HEAD
+CREATE TABLE LinkConcert(
+=======
 CREATE TABLE LinkConcertArt(
+>>>>>>> 02addf441407f8fd2999e91610f19dd159f53637
 L_ConcertArt_SQN INT PRIMARY KEY IDENTITY(1,1),
 L_ConcertArt_LDTS DATETIME,
 L_ConcertArt_RSRC VARCHAR(30),
 H_Artist_SQN INT ,
-H_Concert_SQN INT 
+H_Concert_SQN INT,
+H_Adress_SQN INT 
 )
 
 --  Invoice
@@ -146,9 +150,11 @@ H_Invoice_SQN INT NOT NULL ,
 S_Invoice_LDTS DATETIME,
 S_Invoice_RSRC VARCHAR(30),
 invoiceDate date,
-postalCode varchar(20),
 total integer
 )
+
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 --  Customer
 --~=============/
@@ -170,13 +176,14 @@ CREATE TABLE SatCustomer(
 	Email varchar(40)
 )
 
--- Link ==> Invoice + Customer
-CREATE TABLE LinkInvoiceCust(
+-- Link ==> Invoice + Customer + Address
+CREATE TABLE LinkInvoice(
 	L_InvoiceCust_SQN INT PRIMARY KEY IDENTITY(1,1),
 	L_InvoiceCust_LDTS DATETIME,
 	L_InvoiceCust_RSRC VARCHAR(30),
 	H_Invoice_SQN INT ,
-	H_Customer_SQN INT
+	H_Customer_SQN INT,
+	H_Adress_SQN INT
 )
 
 --  MediaType
@@ -318,13 +325,27 @@ CREATE TABLE LinkTickets(
 	L_Tickets_RSRC VARCHAR(30),
 	H_Tickets_SQN int,
 	H_Invoice_SQN int,
+	H_Concert_SQN int
 )
 
 -- SSIS error Handling : new database+ table
 
 
---DROP DATABASE Chinook_CONFIG
+/*******************************************************************************
+   Drop database if it exists
+********************************************************************************/
+IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'Chinook_CONFIG')
+BEGIN
+	ALTER DATABASE Chinook_CONFIG SET OFFLINE WITH ROLLBACK IMMEDIATE;
+	ALTER DATABASE Chinook_CONFIG SET ONLINE;
+	DROP DATABASE Chinook_CONFIG;
+END
 
+GO
+
+/*******************************************************************************
+   Create database
+********************************************************************************/
 CREATE DATABASE Chinook_CONFIG;
 GO
 

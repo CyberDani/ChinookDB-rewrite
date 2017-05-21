@@ -1,6 +1,23 @@
---DROP DATABASE Chinook_SA
---CREATE DATABASE Chinook_SA
-USE Chinook_SA
+/*******************************************************************************
+   Drop database if it exists
+********************************************************************************/
+IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'Chinook_SA')
+BEGIN
+	ALTER DATABASE Chinook_SA SET OFFLINE WITH ROLLBACK IMMEDIATE;
+	ALTER DATABASE Chinook_SA SET ONLINE;
+	DROP DATABASE Chinook_SA;
+END
+
+GO
+
+/*******************************************************************************
+   Create database
+********************************************************************************/
+CREATE DATABASE Chinook_SA;
+GO
+
+USE Chinook_SA;
+GO
 
 CREATE TABLE Country(
 ID INT PRIMARY KEY IDENTITY(1,1),
@@ -50,7 +67,7 @@ LOAD_DATE datetime not null
 CREATE TABLE Concert(
 ID INT PRIMARY KEY IDENTITY(1,1),
 ConcertID nvarchar(512),
-postalCode nvarchar(512),
+AddressID nvarchar(512),
 cDate  nvarchar(512),
 artistId nvarchar(512),
 EXECUTION_INSTANCE_GUID nvarchar(38) not null,
@@ -82,7 +99,7 @@ ID INT PRIMARY KEY IDENTITY(1,1),
 InvoiceID nvarchar(512),
 customerId nvarchar(512),
 invoiceDate nvarchar(512),
-postalCode nvarchar(512),
+AddressID nvarchar(512),
 total nvarchar(512),
 EXECUTION_INSTANCE_GUID nvarchar(38) not null,
 LOAD_DATE datetime not null
