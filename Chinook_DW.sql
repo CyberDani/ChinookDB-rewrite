@@ -123,11 +123,7 @@ CDate date
 )
 
 -- Link ==> Artist + Concert
-<<<<<<< HEAD
-CREATE TABLE LinkConcert(
-=======
 CREATE TABLE LinkConcertArt(
->>>>>>> 02addf441407f8fd2999e91610f19dd159f53637
 L_ConcertArt_SQN INT PRIMARY KEY IDENTITY(1,1),
 L_ConcertArt_LDTS DATETIME,
 L_ConcertArt_RSRC VARCHAR(30),
