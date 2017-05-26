@@ -1,4 +1,5 @@
 /*CREATE DATABASE Chinook_DM*/
+
 USE Chinook_DM
 CREATE TABLE DimArtist(
 SK_Artist INT PRIMARY KEY IDENTITY(1,1),
@@ -21,19 +22,18 @@ ISVALID BIT
 
 CREATE TABLE DimDate(
 SK_Date int PRIMARY KEY,
-BK_Date VARCHAR(10),
 Datum DATETIME,
 DateMonth VARCHAR(10), 
 DateYear VARCHAR(10),
 DName VARCHAR(40),
 DateQuarter VARCHAR(10),
-DATEFROM DATETIME, 
 ISVALID BIT
 )
 
 CREATE TABLE FactConcert(
 SK_Date int REFERENCES DimDate(SK_Date),
 SK_Artist INT REFERENCES DimArtist(SK_Artist),
+SK_Location INT REFERENCES DimLocation(SK_Location),
 TicketNr INT,
 TotalPrice FLOAT
 )
@@ -69,6 +69,5 @@ CREATE TABLE FactInvoice(
 SK_Date INT REFERENCES DimDate(SK_Date),
 SK_AddrCust INT REFERENCES DimCustomerAddress(SK_CustomerAddress),
 SK_Song INT REFERENCES DimSong(SK_Song),
-SK_Artist INT REFERENCES DimArtist(SK_Artist),
 TotalPrice FLOAT
 )
